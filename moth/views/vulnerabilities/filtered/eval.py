@@ -2,6 +2,7 @@ import subprocess
 import re
 
 from django.shortcuts import render
+from django.utils.formats import get_format
 
 from moth.views.base.vulnerable_template_view import VulnerableTemplateView
 
@@ -59,3 +60,19 @@ class SubprocessView(VulnerableTemplateView):
 
         return render(request, self.template_name, context)
 
+
+class CveView(VulnerableTemplateView):
+    title = 'Django CVE-2015-8213 vulnerability'
+    tags = ['GET', 'get_format']
+    description = '''The get_format function in utils/formats.py in Django before 1.7.x before
+    1.7.11, 1.8.x before 1.8.7, and 1.9.x before 1.9rc2 might allow remote
+    attackers to obtain sensitive application secrets via a settings key in
+    place of a date/time format setting, as demonstrated by SECRET_KEY.'''
+    url_path = 'get_format.py?format_type=TIME_FORMAT'
+    false_positive_check = False
+
+    def get(self, request, *args, **kwds):
+        context = self.get_context_data()
+
+        context['html'] = get_format(request.GET['format_type'])
+        return render(request, self.template_name, context)
