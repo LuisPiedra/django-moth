@@ -19,7 +19,7 @@ RUN useradd ubuntu -d /home/ubuntu
 # Django moth configuration
 WORKDIR /home/ubuntu/
 
-ADD . /home/ubuntu/django-moth
+COPY . /home/ubuntu/django-moth
 WORKDIR /home/ubuntu/django-moth
 RUN pip install -r requirements.txt
 
